@@ -132,8 +132,8 @@ if [ "$AGENT" = "faber" ]; then
   AGENT_MODULE="faber"
   AGENT_PORT=8020
   AGENT_PORT_RANGE=8020-8029
-elif [ "$AGENT" = "alice" ]; then
-  AGENT_MODULE="alice"
+elif [ "$AGENT" = "alice original" ]; then
+  AGENT_MODULE="alice original"
   AGENT_PORT=8030
   AGENT_PORT_RANGE=8030-8039
 elif [ "$AGENT" = "acme" ]; then
@@ -144,8 +144,24 @@ elif [ "$AGENT" = "performance" ]; then
   AGENT_MODULE="performance"
   AGENT_PORT=8050
   AGENT_PORT_RANGE=8050-8069
+elif [ "$AGENT" = "HR" ]; then
+  AGENT_MODULE="HR"
+  AGENT_PORT=8020
+  AGENT_PORT_RANGE=8020-8029
+elif [ "$AGENT" = "DrB" ]; then
+  AGENT_MODULE="DrB"
+  AGENT_PORT=8030
+  AGENT_PORT_RANGE=8030-8039
+elif [ "$AGENT" = "alice" ]; then
+  AGENT_MODULE="alice"
+  AGENT_PORT=8040
+  AGENT_PORT_RANGE=8040-8049
+elif [ "$AGENT" = "DB" ]; then
+  AGENT_MODULE="DB"
+  AGENT_PORT=8050
+  AGENT_PORT_RANGE=8050-8059
 else
-  echo "Please specify which agent you want to run. Choose from 'faber', 'alice', 'acme', or 'performance'."
+  echo "Please specify which agent you want to run. Choose from 'faber', 'alice original', 'acme', or 'performance' from the original code, or 'alice' 'DrB' 'HR' or 'DB' from Brechin's updates"
   exit 1
 fi
 # allow override for agent ports
