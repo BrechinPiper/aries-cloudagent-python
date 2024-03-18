@@ -39,7 +39,7 @@ logging.basicConfig(level=logging.WARNING)
 LOGGER = logging.getLogger(__name__)
 
 
-class DrBAgent(AriesAgent):
+class DrAgent(AriesAgent):
     def __init__(
         self,
         ident: str,
@@ -58,7 +58,7 @@ class DrBAgent(AriesAgent):
             ident,
             http_port,
             admin_port,
-            prefix="DrB",
+            prefix="Dr",
             no_auto=no_auto,
             endorser_role=endorser_role,
             revocation=revocation,
@@ -387,9 +387,9 @@ async def main(args):
     if DEMO_EXTRA_AGENT_ARGS:
         extra_args = json.loads(DEMO_EXTRA_AGENT_ARGS)
         print("Got extra args:", extra_args)
-    DrB_agent = await create_agent_with_args(
+    Dr_agent = await create_agent_with_args(
         args,
-        ident="DrB",
+        ident="Dr",
         extra_args=extra_args,
     )
 
@@ -397,63 +397,63 @@ async def main(args):
         log_status(
             "#1 Provision an agent and wallet, get back configuration details"
             + (
-                f" (Wallet type: {DrB_agent.wallet_type})"
-                if DrB_agent.wallet_type
+                f" (Wallet type: {Dr_agent.wallet_type})"
+                if Dr_agent.wallet_type
                 else ""
             )
         )
-        agent = DrBAgent(
-            "DrB.agent",
-            DrB_agent.start_port,
-            DrB_agent.start_port + 1,
-            genesis_data=DrB_agent.genesis_txns,
-            genesis_txn_list=DrB_agent.genesis_txn_list,
-            no_auto=DrB_agent.no_auto,
-            tails_server_base_url=DrB_agent.tails_server_base_url,
-            revocation=DrB_agent.revocation,
-            timing=DrB_agent.show_timing,
-            multitenant=DrB_agent.multitenant,
-            mediation=DrB_agent.mediation,
-            wallet_type=DrB_agent.wallet_type,
-            seed=DrB_agent.seed,
-            aip=DrB_agent.aip,
-            endorser_role=DrB_agent.endorser_role,
-            anoncreds_legacy_revocation=DrB_agent.anoncreds_legacy_revocation,
-            log_file=DrB_agent.log_file,
-            log_config=DrB_agent.log_config,
-            log_level=DrB_agent.log_level,
+        agent = DrAgent(
+            "Dr.agent",
+            Dr_agent.start_port,
+            Dr_agent.start_port + 1,
+            genesis_data=Dr_agent.genesis_txns,
+            genesis_txn_list=Dr_agent.genesis_txn_list,
+            no_auto=Dr_agent.no_auto,
+            tails_server_base_url=Dr_agent.tails_server_base_url,
+            revocation=Dr_agent.revocation,
+            timing=Dr_agent.show_timing,
+            multitenant=Dr_agent.multitenant,
+            mediation=Dr_agent.mediation,
+            wallet_type=Dr_agent.wallet_type,
+            seed=Dr_agent.seed,
+            aip=Dr_agent.aip,
+            endorser_role=Dr_agent.endorser_role,
+            anoncreds_legacy_revocation=Dr_agent.anoncreds_legacy_revocation,
+            log_file=Dr_agent.log_file,
+            log_config=Dr_agent.log_config,
+            log_level=Dr_agent.log_level,
             extra_args=extra_args,
         )
 
-        DrB_schema_name = "degree schema"
-        DrB_schema_attrs = [
+        Dr_schema_name = "degree schema"
+        Dr_schema_attrs = [
             "name",
             "date",
             "degree",
             "birthdate_dateint",
             "timestamp",
         ]
-        if DrB_agent.cred_type == CRED_FORMAT_INDY:
-            DrB_agent.public_did = True
-            await DrB_agent.initialize(
+        if Dr_agent.cred_type == CRED_FORMAT_INDY:
+            Dr_agent.public_did = True
+            await Dr_agent.initialize(
                 the_agent=agent,
-                schema_name=DrB_schema_name,
-                schema_attrs=DrB_schema_attrs,
+                schema_name=Dr_schema_name,
+                schema_attrs=Dr_schema_attrs,
                 create_endorser_agent=(
-                    (DrB_agent.endorser_role == "author")
-                    if DrB_agent.endorser_role
+                    (Dr_agent.endorser_role == "author")
+                    if Dr_agent.endorser_role
                     else False
                 ),
             )
-        elif DrB_agent.cred_type == CRED_FORMAT_JSON_LD:
-            DrB_agent.public_did = True
-            await DrB_agent.initialize(the_agent=agent)
+        elif Dr_agent.cred_type == CRED_FORMAT_JSON_LD:
+            Dr_agent.public_did = True
+            await Dr_agent.initialize(the_agent=agent)
         else:
-            raise Exception("Invalid credential type:" + DrB_agent.cred_type)
+            raise Exception("Invalid credential type:" + Dr_agent.cred_type)
 
         # generate an invitation for Alice
-        await DrB_agent.generate_invitation(
-            display_qr=True, reuse_connections=DrB_agent.reuse_connections, wait=True
+        await Dr_agent.generate_invitation(
+            display_qr=True, reuse_connections=Dr_agent.reuse_connections, wait=True
         )
 
         exchange_tracing = False
@@ -464,21 +464,21 @@ async def main(args):
             "    (3) Send Message\n"
             "    (4) Create New Invitation\n"
         )
-        if DrB_agent.revocation:
+        if Dr_agent.revocation:
             options += (
                 "    (5) Revoke Credential\n"
                 "    (6) Publish Revocations\n"
                 "    (7) Rotate Revocation Registry\n"
                 "    (8) List Revocation Registries\n"
             )
-        if DrB_agent.endorser_role and DrB_agent.endorser_role == "author":
+        if Dr_agent.endorser_role and Dr_agent.endorser_role == "author":
             options += "    (D) Set Endorser's DID\n"
-        if DrB_agent.multitenant:
+        if Dr_agent.multitenant:
             options += "    (W) Create and/or Enable Wallet\n"
         options += "    (T) Toggle tracing on credential/proof exchange\n"
         options += "    (X) Exit?\n[1/2/3/4/{}{}T/X] ".format(
-            "5/6/7/8/" if DrB_agent.revocation else "",
-            "W/" if DrB_agent.multitenant else "",
+            "5/6/7/8/" if Dr_agent.revocation else "",
+            "W/" if Dr_agent.multitenant else "",
         )
         async for option in prompt_loop(options):
             if option is not None:
@@ -487,43 +487,43 @@ async def main(args):
             if option is None or option in "xX":
                 break
 
-            elif option in "dD" and DrB_agent.endorser_role:
+            elif option in "dD" and Dr_agent.endorser_role:
                 endorser_did = await prompt("Enter Endorser's DID: ")
-                await DrB_agent.agent.admin_POST(
-                    f"/transactions/{DrB_agent.agent.connection_id}/set-endorser-info",
+                await Dr_agent.agent.admin_POST(
+                    f"/transactions/{Dr_agent.agent.connection_id}/set-endorser-info",
                     params={"endorser_did": endorser_did},
                 )
 
-            elif option in "wW" and DrB_agent.multitenant:
+            elif option in "wW" and Dr_agent.multitenant:
                 target_wallet_name = await prompt("Enter wallet name: ")
                 include_subwallet_webhook = await prompt(
                     "(Y/N) Create sub-wallet webhook target: "
                 )
                 if include_subwallet_webhook.lower() == "y":
-                    created = await DrB_agent.agent.register_or_switch_wallet(
+                    created = await Dr_agent.agent.register_or_switch_wallet(
                         target_wallet_name,
-                        webhook_port=DrB_agent.agent.get_new_webhook_port(),
+                        webhook_port=Dr_agent.agent.get_new_webhook_port(),
                         public_did=True,
-                        mediator_agent=DrB_agent.mediator_agent,
-                        endorser_agent=DrB_agent.endorser_agent,
-                        taa_accept=DrB_agent.taa_accept,
+                        mediator_agent=Dr_agent.mediator_agent,
+                        endorser_agent=Dr_agent.endorser_agent,
+                        taa_accept=Dr_agent.taa_accept,
                     )
                 else:
-                    created = await DrB_agent.agent.register_or_switch_wallet(
+                    created = await Dr_agent.agent.register_or_switch_wallet(
                         target_wallet_name,
                         public_did=True,
-                        mediator_agent=DrB_agent.mediator_agent,
-                        endorser_agent=DrB_agent.endorser_agent,
-                        cred_type=DrB_agent.cred_type,
-                        taa_accept=DrB_agent.taa_accept,
+                        mediator_agent=Dr_agent.mediator_agent,
+                        endorser_agent=Dr_agent.endorser_agent,
+                        cred_type=Dr_agent.cred_type,
+                        taa_accept=Dr_agent.taa_accept,
                     )
                 # create a schema and cred def for the new wallet
                 # TODO check first in case we are switching between existing wallets
                 if created:
                     # TODO this fails because the new wallet doesn't get a public DID
-                    await DrB_agent.create_schema_and_cred_def(
-                        schema_name=DrB_schema_name,
-                        schema_attrs=DrB_schema_attrs,
+                    await Dr_agent.create_schema_and_cred_def(
+                        schema_name=Dr_schema_name,
+                        schema_attrs=Dr_schema_attrs,
                     )
 
             elif option in "tT":
@@ -537,83 +537,83 @@ async def main(args):
             elif option == "1":
                 log_status("#13 Issue credential offer to X")
 
-                if DrB_agent.aip == 10:
-                    offer_request = DrB_agent.agent.generate_credential_offer(
-                        DrB_agent.aip, None, DrB_agent.cred_def_id, exchange_tracing
+                if Dr_agent.aip == 10:
+                    offer_request = Dr_agent.agent.generate_credential_offer(
+                        Dr_agent.aip, None, Dr_agent.cred_def_id, exchange_tracing
                     )
-                    await DrB_agent.agent.admin_POST(
+                    await Dr_agent.agent.admin_POST(
                         "/issue-credential/send-offer", offer_request
                     )
 
-                elif DrB_agent.aip == 20:
-                    if DrB_agent.cred_type == CRED_FORMAT_INDY:
-                        offer_request = DrB_agent.agent.generate_credential_offer(
-                            DrB_agent.aip,
-                            DrB_agent.cred_type,
-                            DrB_agent.cred_def_id,
+                elif Dr_agent.aip == 20:
+                    if Dr_agent.cred_type == CRED_FORMAT_INDY:
+                        offer_request = Dr_agent.agent.generate_credential_offer(
+                            Dr_agent.aip,
+                            Dr_agent.cred_type,
+                            Dr_agent.cred_def_id,
                             exchange_tracing,
                         )
 
-                    elif DrB_agent.cred_type == CRED_FORMAT_JSON_LD:
-                        offer_request = DrB_agent.agent.generate_credential_offer(
-                            DrB_agent.aip,
-                            DrB_agent.cred_type,
+                    elif Dr_agent.cred_type == CRED_FORMAT_JSON_LD:
+                        offer_request = Dr_agent.agent.generate_credential_offer(
+                            Dr_agent.aip,
+                            Dr_agent.cred_type,
                             None,
                             exchange_tracing,
                         )
 
                     else:
                         raise Exception(
-                            f"Error invalid credential type: {DrB_agent.cred_type}"
+                            f"Error invalid credential type: {Dr_agent.cred_type}"
                         )
 
-                    await DrB_agent.agent.admin_POST(
+                    await Dr_agent.agent.admin_POST(
                         "/issue-credential-2.0/send-offer", offer_request
                     )
 
                 else:
-                    raise Exception(f"Error invalid AIP level: {DrB_agent.aip}")
+                    raise Exception(f"Error invalid AIP level: {Dr_agent.aip}")
 
             elif option == "2":
                 log_status("#20 Request proof of degree from alice")
-                if DrB_agent.aip == 10:
+                if Dr_agent.aip == 10:
                     proof_request_web_request = (
-                        DrB_agent.agent.generate_proof_request_web_request(
-                            DrB_agent.aip,
-                            DrB_agent.cred_type,
-                            DrB_agent.revocation,
+                        Dr_agent.agent.generate_proof_request_web_request(
+                            Dr_agent.aip,
+                            Dr_agent.cred_type,
+                            Dr_agent.revocation,
                             exchange_tracing,
                         )
                     )
-                    await DrB_agent.agent.admin_POST(
+                    await Dr_agent.agent.admin_POST(
                         "/present-proof/send-request", proof_request_web_request
                     )
                     pass
 
-                elif DrB_agent.aip == 20:
-                    if DrB_agent.cred_type == CRED_FORMAT_INDY:
+                elif Dr_agent.aip == 20:
+                    if Dr_agent.cred_type == CRED_FORMAT_INDY:
                         proof_request_web_request = (
-                            DrB_agent.agent.generate_proof_request_web_request(
-                                DrB_agent.aip,
-                                DrB_agent.cred_type,
-                                DrB_agent.revocation,
+                            Dr_agent.agent.generate_proof_request_web_request(
+                                Dr_agent.aip,
+                                Dr_agent.cred_type,
+                                Dr_agent.revocation,
                                 exchange_tracing,
                             )
                         )
 
-                    elif DrB_agent.cred_type == CRED_FORMAT_JSON_LD:
+                    elif Dr_agent.cred_type == CRED_FORMAT_JSON_LD:
                         proof_request_web_request = (
-                            DrB_agent.agent.generate_proof_request_web_request(
-                                DrB_agent.aip,
-                                DrB_agent.cred_type,
-                                DrB_agent.revocation,
+                            Dr_agent.agent.generate_proof_request_web_request(
+                                Dr_agent.aip,
+                                Dr_agent.cred_type,
+                                Dr_agent.revocation,
                                 exchange_tracing,
                             )
                         )
 
                     else:
                         raise Exception(
-                            "Error invalid credential type:" + DrB_agent.cred_type
+                            "Error invalid credential type:" + Dr_agent.cred_type
                         )
 
                     await agent.admin_POST(
@@ -621,21 +621,21 @@ async def main(args):
                     )
 
                 else:
-                    raise Exception(f"Error invalid AIP level: {DrB_agent.aip}")
+                    raise Exception(f"Error invalid AIP level: {Dr_agent.aip}")
 
             elif option == "2a":
                 log_status("#20 Request * Connectionless * proof of degree from alice")
-                if DrB_agent.aip == 10:
+                if Dr_agent.aip == 10:
                     proof_request_web_request = (
-                        DrB_agent.agent.generate_proof_request_web_request(
-                            DrB_agent.aip,
-                            DrB_agent.cred_type,
-                            DrB_agent.revocation,
+                        Dr_agent.agent.generate_proof_request_web_request(
+                            Dr_agent.aip,
+                            Dr_agent.cred_type,
+                            Dr_agent.revocation,
                             exchange_tracing,
                             connectionless=True,
                         )
                     )
-                    proof_request = await DrB_agent.agent.admin_POST(
+                    proof_request = await Dr_agent.agent.admin_POST(
                         "/present-proof/create-request", proof_request_web_request
                     )
                     pres_req_id = proof_request["presentation_exchange_id"]
@@ -644,7 +644,7 @@ async def main(args):
                         or (
                             "http://"
                             + os.getenv("DOCKERHOST").replace(
-                                "{PORT}", str(DrB_agent.agent.admin_port + 1)
+                                "{PORT}", str(Dr_agent.agent.admin_port + 1)
                             )
                             + "/webhooks"
                         )
@@ -657,40 +657,40 @@ async def main(args):
                     )
                     qr.print_ascii(invert=True)
 
-                elif DrB_agent.aip == 20:
-                    if DrB_agent.cred_type == CRED_FORMAT_INDY:
+                elif Dr_agent.aip == 20:
+                    if Dr_agent.cred_type == CRED_FORMAT_INDY:
                         proof_request_web_request = (
-                            DrB_agent.agent.generate_proof_request_web_request(
-                                DrB_agent.aip,
-                                DrB_agent.cred_type,
-                                DrB_agent.revocation,
+                            Dr_agent.agent.generate_proof_request_web_request(
+                                Dr_agent.aip,
+                                Dr_agent.cred_type,
+                                Dr_agent.revocation,
                                 exchange_tracing,
                                 connectionless=True,
                             )
                         )
-                    elif DrB_agent.cred_type == CRED_FORMAT_JSON_LD:
+                    elif Dr_agent.cred_type == CRED_FORMAT_JSON_LD:
                         proof_request_web_request = (
-                            DrB_agent.agent.generate_proof_request_web_request(
-                                DrB_agent.aip,
-                                DrB_agent.cred_type,
-                                DrB_agent.revocation,
+                            Dr_agent.agent.generate_proof_request_web_request(
+                                Dr_agent.aip,
+                                Dr_agent.cred_type,
+                                Dr_agent.revocation,
                                 exchange_tracing,
                                 connectionless=True,
                             )
                         )
                     else:
                         raise Exception(
-                            "Error invalid credential type:" + DrB_agent.cred_type
+                            "Error invalid credential type:" + Dr_agent.cred_type
                         )
 
-                    proof_request = await DrB_agent.agent.admin_POST(
+                    proof_request = await Dr_agent.agent.admin_POST(
                         "/present-proof-2.0/create-request", proof_request_web_request
                     )
                     pres_req_id = proof_request["pres_ex_id"]
                     url = (
                         "http://"
                         + os.getenv("DOCKERHOST").replace(
-                            "{PORT}", str(DrB_agent.agent.admin_port + 1)
+                            "{PORT}", str(Dr_agent.agent.admin_port + 1)
                         )
                         + "/webhooks/pres_req/"
                         + pres_req_id
@@ -704,12 +704,12 @@ async def main(args):
                     )
                     qr.print_ascii(invert=True)
                 else:
-                    raise Exception(f"Error invalid AIP level: {DrB_agent.aip}")
+                    raise Exception(f"Error invalid AIP level: {Dr_agent.aip}")
 
             elif option == "3":
                 msg = await prompt("Enter message: ")
-                await DrB_agent.agent.admin_POST(
-                    f"/connections/{DrB_agent.agent.connection_id}/send-message",
+                await Dr_agent.agent.admin_POST(
+                    f"/connections/{Dr_agent.agent.connection_id}/send-message",
                     {"content": msg},
                 )
 
@@ -718,26 +718,26 @@ async def main(args):
                     "Creating a new invitation, please receive "
                     "and accept this invitation using Alice agent"
                 )
-                await DrB_agent.generate_invitation(
+                await Dr_agent.generate_invitation(
                     display_qr=True,
-                    reuse_connections=DrB_agent.reuse_connections,
+                    reuse_connections=Dr_agent.reuse_connections,
                     wait=True,
                 )
 
-            elif option == "5" and DrB_agent.revocation:
+            elif option == "5" and Dr_agent.revocation:
                 rev_reg_id = (await prompt("Enter revocation registry ID: ")).strip()
                 cred_rev_id = (await prompt("Enter credential revocation ID: ")).strip()
                 publish = (
                     await prompt("Publish now? [Y/N]: ", default="N")
                 ).strip() in "yY"
                 try:
-                    await DrB_agent.agent.admin_POST(
+                    await Dr_agent.agent.admin_POST(
                         "/revocation/revoke",
                         {
                             "rev_reg_id": rev_reg_id,
                             "cred_rev_id": cred_rev_id,
                             "publish": publish,
-                            "connection_id": DrB_agent.agent.connection_id,
+                            "connection_id": Dr_agent.agent.connection_id,
                             # leave out thread_id, let aca-py generate
                             # "thread_id": "12345678-4444-4444-4444-123456789012",
                             "comment": "Revocation reason goes here ...",
@@ -746,12 +746,12 @@ async def main(args):
                 except ClientError:
                     pass
 
-            elif option == "6" and DrB_agent.revocation:
+            elif option == "6" and Dr_agent.revocation:
                 try:
-                    resp = await DrB_agent.agent.admin_POST(
+                    resp = await Dr_agent.agent.admin_POST(
                         "/revocation/publish-revocations", {}
                     )
-                    DrB_agent.agent.log(
+                    Dr_agent.agent.log(
                         "Published revocations for {} revocation registr{} {}".format(
                             len(resp["rrid2crid"]),
                             "y" if len(resp["rrid2crid"]) == 1 else "ies",
@@ -760,21 +760,21 @@ async def main(args):
                     )
                 except ClientError:
                     pass
-            elif option == "7" and DrB_agent.revocation:
+            elif option == "7" and Dr_agent.revocation:
                 try:
-                    resp = await DrB_agent.agent.admin_POST(
-                        f"/revocation/active-registry/{DrB_agent.cred_def_id}/rotate",
+                    resp = await Dr_agent.agent.admin_POST(
+                        f"/revocation/active-registry/{Dr_agent.cred_def_id}/rotate",
                         {},
                     )
-                    DrB_agent.agent.log(
+                    Dr_agent.agent.log(
                         "Rotated registries for {}. Decommissioned Registries: {}".format(
-                            DrB_agent.cred_def_id,
+                            Dr_agent.cred_def_id,
                             json.dumps([r for r in resp["rev_reg_ids"]], indent=4),
                         )
                     )
                 except ClientError:
                     pass
-            elif option == "8" and DrB_agent.revocation:
+            elif option == "8" and Dr_agent.revocation:
                 states = [
                     "init",
                     "generated",
@@ -792,11 +792,11 @@ async def main(args):
                 if state not in states:
                     state = "active"
                 try:
-                    resp = await DrB_agent.agent.admin_GET(
+                    resp = await Dr_agent.agent.admin_GET(
                         "/revocation/registries/created",
                         params={"state": state},
                     )
-                    DrB_agent.agent.log(
+                    Dr_agent.agent.log(
                         "Registries (state = '{}'): {}".format(
                             state,
                             json.dumps([r for r in resp["rev_reg_ids"]], indent=4),
@@ -805,14 +805,14 @@ async def main(args):
                 except ClientError:
                     pass
 
-        if DrB_agent.show_timing:
-            timing = await DrB_agent.agent.fetch_timing()
+        if Dr_agent.show_timing:
+            timing = await Dr_agent.agent.fetch_timing()
             if timing:
-                for line in DrB_agent.agent.format_timing(timing):
+                for line in Dr_agent.agent.format_timing(timing):
                     log_msg(line)
 
     finally:
-        terminated = await DrB_agent.terminate()
+        terminated = await Dr_agent.terminate()
 
     await asyncio.sleep(0.1)
 
@@ -821,7 +821,7 @@ async def main(args):
 
 
 if __name__ == "__main__":
-    parser = arg_parser(ident="DrB", port=8030)
+    parser = arg_parser(ident="Dr", port=8030)
     args = parser.parse_args()
 
     ENABLE_PYDEVD_PYCHARM = os.getenv("ENABLE_PYDEVD_PYCHARM", "").lower()
@@ -839,7 +839,7 @@ if __name__ == "__main__":
             import pydevd_pycharm
 
             print(
-                "DrB remote debugging to "
+                "Dr remote debugging to "
                 f"{PYDEVD_PYCHARM_HOST}:{PYDEVD_PYCHARM_CONTROLLER_PORT}"
             )
             pydevd_pycharm.settrace(
