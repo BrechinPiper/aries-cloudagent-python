@@ -39,7 +39,7 @@ logging.basicConfig(level=logging.WARNING)
 LOGGER = logging.getLogger(__name__)
 
 
-class aliceAgent(AriesAgent):
+class alisonAgent(AriesAgent):
     def __init__(
         self,
         ident: str,
@@ -58,7 +58,7 @@ class aliceAgent(AriesAgent):
             ident,
             http_port,
             admin_port,
-            prefix="alice",
+            prefix="alison",
             no_auto=no_auto,
             endorser_role=endorser_role,
             revocation=revocation,
@@ -91,7 +91,7 @@ class aliceAgent(AriesAgent):
         if aip == 10:
             # define attributes to send for credential
             self.cred_attrs[cred_def_id] = {
-                "name": "Alice Smith",
+                "name": "alison Smith",
                 "date": "2018-05-28",
                 "degree": "Maths",
                 "birthdate_dateint": birth_date.strftime(birth_date_format),
@@ -118,7 +118,7 @@ class aliceAgent(AriesAgent):
         elif aip == 20:
             if cred_type == CRED_FORMAT_INDY:
                 self.cred_attrs[cred_def_id] = {
-                    "name": "Alice Smith",
+                    "name": "alison Smith",
                     "date": "2018-05-28",
                     "degree": "Maths",
                     "birthdate_dateint": birth_date.strftime(birth_date_format),
@@ -162,7 +162,7 @@ class aliceAgent(AriesAgent):
                                 "issuanceDate": "2020-01-01T12:00:00Z",
                                 "credentialSubject": {
                                     "type": ["PermanentResident"],
-                                    "givenName": "ALICE",
+                                    "givenName": "alison",
                                     "familyName": "SMITH",
                                     "gender": "Female",
                                     "birthCountry": "Bahamas",
@@ -387,9 +387,9 @@ async def main(args):
     if DEMO_EXTRA_AGENT_ARGS:
         extra_args = json.loads(DEMO_EXTRA_AGENT_ARGS)
         print("Got extra args:", extra_args)
-    alice_agent = await create_agent_with_args(
+    alison_agent = await create_agent_with_args(
         args,
-        ident="alice",
+        ident="alison",
         extra_args=extra_args,
     )
 
@@ -397,63 +397,63 @@ async def main(args):
         log_status(
             "#1 Provision an agent and wallet, get back configuration details"
             + (
-                f" (Wallet type: {alice_agent.wallet_type})"
-                if alice_agent.wallet_type
+                f" (Wallet type: {alison_agent.wallet_type})"
+                if alison_agent.wallet_type
                 else ""
             )
         )
-        agent = aliceAgent(
-            "alice.agent",
-            alice_agent.start_port,
-            alice_agent.start_port + 1,
-            genesis_data=alice_agent.genesis_txns,
-            genesis_txn_list=alice_agent.genesis_txn_list,
-            no_auto=alice_agent.no_auto,
-            tails_server_base_url=alice_agent.tails_server_base_url,
-            revocation=alice_agent.revocation,
-            timing=alice_agent.show_timing,
-            multitenant=alice_agent.multitenant,
-            mediation=alice_agent.mediation,
-            wallet_type=alice_agent.wallet_type,
-            seed=alice_agent.seed,
-            aip=alice_agent.aip,
-            endorser_role=alice_agent.endorser_role,
-            anoncreds_legacy_revocation=alice_agent.anoncreds_legacy_revocation,
-            log_file=alice_agent.log_file,
-            log_config=alice_agent.log_config,
-            log_level=alice_agent.log_level,
+        agent = alisonAgent(
+            "alison.agent",
+            alison_agent.start_port,
+            alison_agent.start_port + 1,
+            genesis_data=alison_agent.genesis_txns,
+            genesis_txn_list=alison_agent.genesis_txn_list,
+            no_auto=alison_agent.no_auto,
+            tails_server_base_url=alison_agent.tails_server_base_url,
+            revocation=alison_agent.revocation,
+            timing=alison_agent.show_timing,
+            multitenant=alison_agent.multitenant,
+            mediation=alison_agent.mediation,
+            wallet_type=alison_agent.wallet_type,
+            seed=alison_agent.seed,
+            aip=alison_agent.aip,
+            endorser_role=alison_agent.endorser_role,
+            anoncreds_legacy_revocation=alison_agent.anoncreds_legacy_revocation,
+            log_file=alison_agent.log_file,
+            log_config=alison_agent.log_config,
+            log_level=alison_agent.log_level,
             extra_args=extra_args,
         )
 
-        alice_schema_name = "degree schema"
-        alice_schema_attrs = [
+        alison_schema_name = "degree schema"
+        alison_schema_attrs = [
             "name",
             "date",
             "degree",
             "birthdate_dateint",
             "timestamp",
         ]
-        if alice_agent.cred_type == CRED_FORMAT_INDY:
-            alice_agent.public_did = True
-            await alice_agent.initialize(
+        if alison_agent.cred_type == CRED_FORMAT_INDY:
+            alison_agent.public_did = True
+            await alison_agent.initialize(
                 the_agent=agent,
-                schema_name=alice_schema_name,
-                schema_attrs=alice_schema_attrs,
+                schema_name=alison_schema_name,
+                schema_attrs=alison_schema_attrs,
                 create_endorser_agent=(
-                    (alice_agent.endorser_role == "author")
-                    if alice_agent.endorser_role
+                    (alison_agent.endorser_role == "author")
+                    if alison_agent.endorser_role
                     else False
                 ),
             )
-        elif alice_agent.cred_type == CRED_FORMAT_JSON_LD:
-            alice_agent.public_did = True
-            await alice_agent.initialize(the_agent=agent)
+        elif alison_agent.cred_type == CRED_FORMAT_JSON_LD:
+            alison_agent.public_did = True
+            await alison_agent.initialize(the_agent=agent)
         else:
-            raise Exception("Invalid credential type:" + alice_agent.cred_type)
+            raise Exception("Invalid credential type:" + alison_agent.cred_type)
 
-        # generate an invitation for Alice
-        await alice_agent.generate_invitation(
-            display_qr=True, reuse_connections=alice_agent.reuse_connections, wait=True
+        # generate an invitation for alison
+        await alison_agent.generate_invitation(
+            display_qr=True, reuse_connections=alison_agent.reuse_connections, wait=True
         )
 
         exchange_tracing = False
@@ -464,21 +464,21 @@ async def main(args):
             "    (3) Send Message\n"
             "    (4) Create New Invitation\n"
         )
-        if alice_agent.revocation:
+        if alison_agent.revocation:
             options += (
                 "    (5) Revoke Credential\n"
                 "    (6) Publish Revocations\n"
                 "    (7) Rotate Revocation Registry\n"
                 "    (8) List Revocation Registries\n"
             )
-        if alice_agent.endorser_role and alice_agent.endorser_role == "author":
+        if alison_agent.endorser_role and alison_agent.endorser_role == "author":
             options += "    (D) Set Endorser's DID\n"
-        if alice_agent.multitenant:
+        if alison_agent.multitenant:
             options += "    (W) Create and/or Enable Wallet\n"
         options += "    (T) Toggle tracing on credential/proof exchange\n"
         options += "    (X) Exit?\n[1/2/3/4/{}{}T/X] ".format(
-            "5/6/7/8/" if alice_agent.revocation else "",
-            "W/" if alice_agent.multitenant else "",
+            "5/6/7/8/" if alison_agent.revocation else "",
+            "W/" if alison_agent.multitenant else "",
         )
         async for option in prompt_loop(options):
             if option is not None:
@@ -487,43 +487,43 @@ async def main(args):
             if option is None or option in "xX":
                 break
 
-            elif option in "dD" and alice_agent.endorser_role:
+            elif option in "dD" and alison_agent.endorser_role:
                 endorser_did = await prompt("Enter Endorser's DID: ")
-                await alice_agent.agent.admin_POST(
-                    f"/transactions/{alice_agent.agent.connection_id}/set-endorser-info",
+                await alison_agent.agent.admin_POST(
+                    f"/transactions/{alison_agent.agent.connection_id}/set-endorser-info",
                     params={"endorser_did": endorser_did},
                 )
 
-            elif option in "wW" and alice_agent.multitenant:
+            elif option in "wW" and alison_agent.multitenant:
                 target_wallet_name = await prompt("Enter wallet name: ")
                 include_subwallet_webhook = await prompt(
                     "(Y/N) Create sub-wallet webhook target: "
                 )
                 if include_subwallet_webhook.lower() == "y":
-                    created = await alice_agent.agent.register_or_switch_wallet(
+                    created = await alison_agent.agent.register_or_switch_wallet(
                         target_wallet_name,
-                        webhook_port=alice_agent.agent.get_new_webhook_port(),
+                        webhook_port=alison_agent.agent.get_new_webhook_port(),
                         public_did=True,
-                        mediator_agent=alice_agent.mediator_agent,
-                        endorser_agent=alice_agent.endorser_agent,
-                        taa_accept=alice_agent.taa_accept,
+                        mediator_agent=alison_agent.mediator_agent,
+                        endorser_agent=alison_agent.endorser_agent,
+                        taa_accept=alison_agent.taa_accept,
                     )
                 else:
-                    created = await alice_agent.agent.register_or_switch_wallet(
+                    created = await alison_agent.agent.register_or_switch_wallet(
                         target_wallet_name,
                         public_did=True,
-                        mediator_agent=alice_agent.mediator_agent,
-                        endorser_agent=alice_agent.endorser_agent,
-                        cred_type=alice_agent.cred_type,
-                        taa_accept=alice_agent.taa_accept,
+                        mediator_agent=alison_agent.mediator_agent,
+                        endorser_agent=alison_agent.endorser_agent,
+                        cred_type=alison_agent.cred_type,
+                        taa_accept=alison_agent.taa_accept,
                     )
                 # create a schema and cred def for the new wallet
                 # TODO check first in case we are switching between existing wallets
                 if created:
                     # TODO this fails because the new wallet doesn't get a public DID
-                    await alice_agent.create_schema_and_cred_def(
-                        schema_name=alice_schema_name,
-                        schema_attrs=alice_schema_attrs,
+                    await alison_agent.create_schema_and_cred_def(
+                        schema_name=alison_schema_name,
+                        schema_attrs=alison_schema_attrs,
                     )
 
             elif option in "tT":
@@ -537,83 +537,83 @@ async def main(args):
             elif option == "1":
                 log_status("#13 Issue credential offer to X")
 
-                if alice_agent.aip == 10:
-                    offer_request = alice_agent.agent.generate_credential_offer(
-                        alice_agent.aip, None, alice_agent.cred_def_id, exchange_tracing
+                if alison_agent.aip == 10:
+                    offer_request = alison_agent.agent.generate_credential_offer(
+                        alison_agent.aip, None, alison_agent.cred_def_id, exchange_tracing
                     )
-                    await alice_agent.agent.admin_POST(
+                    await alison_agent.agent.admin_POST(
                         "/issue-credential/send-offer", offer_request
                     )
 
-                elif alice_agent.aip == 20:
-                    if alice_agent.cred_type == CRED_FORMAT_INDY:
-                        offer_request = alice_agent.agent.generate_credential_offer(
-                            alice_agent.aip,
-                            alice_agent.cred_type,
-                            alice_agent.cred_def_id,
+                elif alison_agent.aip == 20:
+                    if alison_agent.cred_type == CRED_FORMAT_INDY:
+                        offer_request = alison_agent.agent.generate_credential_offer(
+                            alison_agent.aip,
+                            alison_agent.cred_type,
+                            alison_agent.cred_def_id,
                             exchange_tracing,
                         )
 
-                    elif alice_agent.cred_type == CRED_FORMAT_JSON_LD:
-                        offer_request = alice_agent.agent.generate_credential_offer(
-                            alice_agent.aip,
-                            alice_agent.cred_type,
+                    elif alison_agent.cred_type == CRED_FORMAT_JSON_LD:
+                        offer_request = alison_agent.agent.generate_credential_offer(
+                            alison_agent.aip,
+                            alison_agent.cred_type,
                             None,
                             exchange_tracing,
                         )
 
                     else:
                         raise Exception(
-                            f"Error invalid credential type: {alice_agent.cred_type}"
+                            f"Error invalid credential type: {alison_agent.cred_type}"
                         )
 
-                    await alice_agent.agent.admin_POST(
+                    await alison_agent.agent.admin_POST(
                         "/issue-credential-2.0/send-offer", offer_request
                     )
 
                 else:
-                    raise Exception(f"Error invalid AIP level: {alice_agent.aip}")
+                    raise Exception(f"Error invalid AIP level: {alison_agent.aip}")
 
             elif option == "2":
-                log_status("#20 Request proof of degree from alice")
-                if alice_agent.aip == 10:
+                log_status("#20 Request proof of degree from alison")
+                if alison_agent.aip == 10:
                     proof_request_web_request = (
-                        alice_agent.agent.generate_proof_request_web_request(
-                            alice_agent.aip,
-                            alice_agent.cred_type,
-                            alice_agent.revocation,
+                        alison_agent.agent.generate_proof_request_web_request(
+                            alison_agent.aip,
+                            alison_agent.cred_type,
+                            alison_agent.revocation,
                             exchange_tracing,
                         )
                     )
-                    await alice_agent.agent.admin_POST(
+                    await alison_agent.agent.admin_POST(
                         "/present-proof/send-request", proof_request_web_request
                     )
                     pass
 
-                elif alice_agent.aip == 20:
-                    if alice_agent.cred_type == CRED_FORMAT_INDY:
+                elif alison_agent.aip == 20:
+                    if alison_agent.cred_type == CRED_FORMAT_INDY:
                         proof_request_web_request = (
-                            alice_agent.agent.generate_proof_request_web_request(
-                                alice_agent.aip,
-                                alice_agent.cred_type,
-                                alice_agent.revocation,
+                            alison_agent.agent.generate_proof_request_web_request(
+                                alison_agent.aip,
+                                alison_agent.cred_type,
+                                alison_agent.revocation,
                                 exchange_tracing,
                             )
                         )
 
-                    elif alice_agent.cred_type == CRED_FORMAT_JSON_LD:
+                    elif alison_agent.cred_type == CRED_FORMAT_JSON_LD:
                         proof_request_web_request = (
-                            alice_agent.agent.generate_proof_request_web_request(
-                                alice_agent.aip,
-                                alice_agent.cred_type,
-                                alice_agent.revocation,
+                            alison_agent.agent.generate_proof_request_web_request(
+                                alison_agent.aip,
+                                alison_agent.cred_type,
+                                alison_agent.revocation,
                                 exchange_tracing,
                             )
                         )
 
                     else:
                         raise Exception(
-                            "Error invalid credential type:" + alice_agent.cred_type
+                            "Error invalid credential type:" + alison_agent.cred_type
                         )
 
                     await agent.admin_POST(
@@ -621,21 +621,21 @@ async def main(args):
                     )
 
                 else:
-                    raise Exception(f"Error invalid AIP level: {alice_agent.aip}")
+                    raise Exception(f"Error invalid AIP level: {alison_agent.aip}")
 
             elif option == "2a":
-                log_status("#20 Request * Connectionless * proof of degree from alice")
-                if alice_agent.aip == 10:
+                log_status("#20 Request * Connectionless * proof of degree from alison")
+                if alison_agent.aip == 10:
                     proof_request_web_request = (
-                        alice_agent.agent.generate_proof_request_web_request(
-                            alice_agent.aip,
-                            alice_agent.cred_type,
-                            alice_agent.revocation,
+                        alison_agent.agent.generate_proof_request_web_request(
+                            alison_agent.aip,
+                            alison_agent.cred_type,
+                            alison_agent.revocation,
                             exchange_tracing,
                             connectionless=True,
                         )
                     )
-                    proof_request = await alice_agent.agent.admin_POST(
+                    proof_request = await alison_agent.agent.admin_POST(
                         "/present-proof/create-request", proof_request_web_request
                     )
                     pres_req_id = proof_request["presentation_exchange_id"]
@@ -644,7 +644,7 @@ async def main(args):
                         or (
                             "http://"
                             + os.getenv("DOCKERHOST").replace(
-                                "{PORT}", str(alice_agent.agent.admin_port + 1)
+                                "{PORT}", str(alison_agent.agent.admin_port + 1)
                             )
                             + "/webhooks"
                         )
@@ -657,40 +657,40 @@ async def main(args):
                     )
                     qr.print_ascii(invert=True)
 
-                elif alice_agent.aip == 20:
-                    if alice_agent.cred_type == CRED_FORMAT_INDY:
+                elif alison_agent.aip == 20:
+                    if alison_agent.cred_type == CRED_FORMAT_INDY:
                         proof_request_web_request = (
-                            alice_agent.agent.generate_proof_request_web_request(
-                                alice_agent.aip,
-                                alice_agent.cred_type,
-                                alice_agent.revocation,
+                            alison_agent.agent.generate_proof_request_web_request(
+                                alison_agent.aip,
+                                alison_agent.cred_type,
+                                alison_agent.revocation,
                                 exchange_tracing,
                                 connectionless=True,
                             )
                         )
-                    elif alice_agent.cred_type == CRED_FORMAT_JSON_LD:
+                    elif alison_agent.cred_type == CRED_FORMAT_JSON_LD:
                         proof_request_web_request = (
-                            alice_agent.agent.generate_proof_request_web_request(
-                                alice_agent.aip,
-                                alice_agent.cred_type,
-                                alice_agent.revocation,
+                            alison_agent.agent.generate_proof_request_web_request(
+                                alison_agent.aip,
+                                alison_agent.cred_type,
+                                alison_agent.revocation,
                                 exchange_tracing,
                                 connectionless=True,
                             )
                         )
                     else:
                         raise Exception(
-                            "Error invalid credential type:" + alice_agent.cred_type
+                            "Error invalid credential type:" + alison_agent.cred_type
                         )
 
-                    proof_request = await alice_agent.agent.admin_POST(
+                    proof_request = await alison_agent.agent.admin_POST(
                         "/present-proof-2.0/create-request", proof_request_web_request
                     )
                     pres_req_id = proof_request["pres_ex_id"]
                     url = (
                         "http://"
                         + os.getenv("DOCKERHOST").replace(
-                            "{PORT}", str(alice_agent.agent.admin_port + 1)
+                            "{PORT}", str(alison_agent.agent.admin_port + 1)
                         )
                         + "/webhooks/pres_req/"
                         + pres_req_id
@@ -704,40 +704,40 @@ async def main(args):
                     )
                     qr.print_ascii(invert=True)
                 else:
-                    raise Exception(f"Error invalid AIP level: {alice_agent.aip}")
+                    raise Exception(f"Error invalid AIP level: {alison_agent.aip}")
 
             elif option == "3":
                 msg = await prompt("Enter message: ")
-                await alice_agent.agent.admin_POST(
-                    f"/connections/{alice_agent.agent.connection_id}/send-message",
+                await alison_agent.agent.admin_POST(
+                    f"/connections/{alison_agent.agent.connection_id}/send-message",
                     {"content": msg},
                 )
 
             elif option == "4":
                 log_msg(
                     "Creating a new invitation, please receive "
-                    "and accept this invitation using Alice agent"
+                    "and accept this invitation using alison agent"
                 )
-                await alice_agent.generate_invitation(
+                await alison_agent.generate_invitation(
                     display_qr=True,
-                    reuse_connections=alice_agent.reuse_connections,
+                    reuse_connections=alison_agent.reuse_connections,
                     wait=True,
                 )
 
-            elif option == "5" and alice_agent.revocation:
+            elif option == "5" and alison_agent.revocation:
                 rev_reg_id = (await prompt("Enter revocation registry ID: ")).strip()
                 cred_rev_id = (await prompt("Enter credential revocation ID: ")).strip()
                 publish = (
                     await prompt("Publish now? [Y/N]: ", default="N")
                 ).strip() in "yY"
                 try:
-                    await alice_agent.agent.admin_POST(
+                    await alison_agent.agent.admin_POST(
                         "/revocation/revoke",
                         {
                             "rev_reg_id": rev_reg_id,
                             "cred_rev_id": cred_rev_id,
                             "publish": publish,
-                            "connection_id": alice_agent.agent.connection_id,
+                            "connection_id": alison_agent.agent.connection_id,
                             # leave out thread_id, let aca-py generate
                             # "thread_id": "12345678-4444-4444-4444-123456789012",
                             "comment": "Revocation reason goes here ...",
@@ -746,12 +746,12 @@ async def main(args):
                 except ClientError:
                     pass
 
-            elif option == "6" and alice_agent.revocation:
+            elif option == "6" and alison_agent.revocation:
                 try:
-                    resp = await alice_agent.agent.admin_POST(
+                    resp = await alison_agent.agent.admin_POST(
                         "/revocation/publish-revocations", {}
                     )
-                    alice_agent.agent.log(
+                    alison_agent.agent.log(
                         "Published revocations for {} revocation registr{} {}".format(
                             len(resp["rrid2crid"]),
                             "y" if len(resp["rrid2crid"]) == 1 else "ies",
@@ -760,21 +760,21 @@ async def main(args):
                     )
                 except ClientError:
                     pass
-            elif option == "7" and alice_agent.revocation:
+            elif option == "7" and alison_agent.revocation:
                 try:
-                    resp = await alice_agent.agent.admin_POST(
-                        f"/revocation/active-registry/{alice_agent.cred_def_id}/rotate",
+                    resp = await alison_agent.agent.admin_POST(
+                        f"/revocation/active-registry/{alison_agent.cred_def_id}/rotate",
                         {},
                     )
-                    alice_agent.agent.log(
+                    alison_agent.agent.log(
                         "Rotated registries for {}. Decommissioned Registries: {}".format(
-                            alice_agent.cred_def_id,
+                            alison_agent.cred_def_id,
                             json.dumps([r for r in resp["rev_reg_ids"]], indent=4),
                         )
                     )
                 except ClientError:
                     pass
-            elif option == "8" and alice_agent.revocation:
+            elif option == "8" and alison_agent.revocation:
                 states = [
                     "init",
                     "generated",
@@ -792,11 +792,11 @@ async def main(args):
                 if state not in states:
                     state = "active"
                 try:
-                    resp = await alice_agent.agent.admin_GET(
+                    resp = await alison_agent.agent.admin_GET(
                         "/revocation/registries/created",
                         params={"state": state},
                     )
-                    alice_agent.agent.log(
+                    alison_agent.agent.log(
                         "Registries (state = '{}'): {}".format(
                             state,
                             json.dumps([r for r in resp["rev_reg_ids"]], indent=4),
@@ -805,14 +805,14 @@ async def main(args):
                 except ClientError:
                     pass
 
-        if alice_agent.show_timing:
-            timing = await alice_agent.agent.fetch_timing()
+        if alison_agent.show_timing:
+            timing = await alison_agent.agent.fetch_timing()
             if timing:
-                for line in alice_agent.agent.format_timing(timing):
+                for line in alison_agent.agent.format_timing(timing):
                     log_msg(line)
 
     finally:
-        terminated = await alice_agent.terminate()
+        terminated = await alison_agent.terminate()
 
     await asyncio.sleep(0.1)
 
@@ -821,7 +821,7 @@ async def main(args):
 
 
 if __name__ == "__main__":
-    parser = arg_parser(ident="alice", port=8040)
+    parser = arg_parser(ident="alison", port=8040)
     args = parser.parse_args()
 
     ENABLE_PYDEVD_PYCHARM = os.getenv("ENABLE_PYDEVD_PYCHARM", "").lower()
@@ -839,7 +839,7 @@ if __name__ == "__main__":
             import pydevd_pycharm
 
             print(
-                "alice remote debugging to "
+                "alison remote debugging to "
                 f"{PYDEVD_PYCHARM_HOST}:{PYDEVD_PYCHARM_CONTROLLER_PORT}"
             )
             pydevd_pycharm.settrace(
