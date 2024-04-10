@@ -10,6 +10,16 @@
 Full access to an organized set of all of the ACA-Py documents is available at [https://aca-py.org](https://aca-py.org).
 Check it out! It's much easier to navigate than this GitHub repo for reading the documentation.
 
+This repository was forked from the Hyperledger main version in April 2024 as part of graduate studies into self-sovereign identity and how SSI credentials could be used in place of role based authentication, like username and passwords. Of specific interest, was creating and using a consent based schema, where the data owner would issue a consent credential that could be used to log into a centralized legacy database. The changes from the main repo are located in the demo folder, the run_demo file was modified to include several additional agents. The agents, located in the demo/runners folder are Allison, DB, DrB, and HR. The agents are modified from the original Faber demo agent to simulate a patient, legacy database, healthcare practitioner, and healthcare regulator respectively. The agents can be launched in the same fashion as the Alice and Faber agents from the original demo. 
+
+
+
+
+
+
+
+
+
 ## Overview
 
 Hyperledger Aries Cloud Agent Python (ACA-Py) is a foundation for building Verifiable Credential (VC) ecosystems. It operates in the second and third layers of the [Trust Over IP framework (PDF)](https://trustoverip.org/wp-content/uploads/2020/05/toip_050520_primer.pdf) using [DIDComm messaging](https://github.com/hyperledger/aries-rfcs/tree/main/concepts/0005-didcomm) and [Hyperledger Aries](https://www.hyperledger.org/use/aries) protocols. The "cloud" in the name means that ACA-Py runs on servers (cloud, enterprise, IoT devices, and so forth), and is not designed to run on mobile devices.
