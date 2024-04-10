@@ -5,12 +5,18 @@
 
 <!-- ![logo](/doc/assets/aries-cloudagent-python-logo-bw.png) -->
 
-> An easy to use Aries agent for building SSI services using any language that supports sending/receiving HTTP requests.
+## Changes and Purpose
 
-Full access to an organized set of all of the ACA-Py documents is available at [https://aca-py.org](https://aca-py.org).
-Check it out! It's much easier to navigate than this GitHub repo for reading the documentation.
+This repository was forked from the Hyperledger main version in April 2024 as part of graduate studies into self-sovereign identity into how SSI credentials could be used in place of role based authentication, like username and passwords. Of specific interest, was creating and using a consent based schema, where the data owner would issue a consent credential that could be used to log into a centralized legacy database. The changes from the main repo are located in the demo folder, the run_demo file was modified to include several additional agents. The agents, located in the demo/runners folder are Allison, DB, DrB, and HR. The agents are modified from the original Faber demo agent to simulate a patient, legacy database, healthcare practitioner, and healthcare regulator respectively. The agents can be launched in the same fashion as the Alice and Faber agents from the original demo. 
 
-This repository was forked from the Hyperledger main version in April 2024 as part of graduate studies into self-sovereign identity and how SSI credentials could be used in place of role based authentication, like username and passwords. Of specific interest, was creating and using a consent based schema, where the data owner would issue a consent credential that could be used to log into a centralized legacy database. The changes from the main repo are located in the demo folder, the run_demo file was modified to include several additional agents. The agents, located in the demo/runners folder are Allison, DB, DrB, and HR. The agents are modified from the original Faber demo agent to simulate a patient, legacy database, healthcare practitioner, and healthcare regulator respectively. The agents can be launched in the same fashion as the Alice and Faber agents from the original demo. 
+Underlying knowledge of the Alice and Faber demo is highly recommended. 
+https://github.com/BrechinPiper/aries-cloudagent-python/blob/main/docs/demo/AriesOpenAPIDemo.md
+
+The public VON testnet may be used, or a local VON testnet instance is easily set up following the guide at: https://github.com/BrechinPiper/von-network
+
+If using windows as a test environment, I highly recommend using the windows docker software to view logs and CLI notices from the agents. It is very easy to accidentally hit ctrl+c in an attempt to copy something from the CLI, which will terminate the agent. 
+
+
 
 
 
