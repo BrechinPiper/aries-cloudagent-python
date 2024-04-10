@@ -16,6 +16,8 @@ The public VON testnet may be used, or a local VON testnet instance is easily se
 
 If using windows as a test environment, I highly recommend using the windows docker software to view logs and CLI notices from the agents. It is very easy to accidentally hit ctrl+c in an attempt to copy something from the CLI, which will terminate the agent. 
 
+Using the openAPI inputs exposed via browser, several credentials were issued and proofs conducted. The code used can be found at:https://github.com/BrechinPiper/aries-cloudagent-python/blob/main/demo/experimentresults.md , note that it assumes familiarity with the Alice Faber openAPI demo linked above. 
+
 
 
 
